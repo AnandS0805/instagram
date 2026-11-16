@@ -258,31 +258,31 @@
     const SUPABASE_URL = ENV.SUPABASE_URL || '';
     const SUPABASE_ANON_KEY = ENV.SUPABASE_ANON_KEY || '';
 
-    const supabase = (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY)
+    const supabaseClient = (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY)
       ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
       : null;
 
     const form = document.getElementById('loginForm');
-    const username = document.getElementById('username');
-    const password = document.getElementById('password');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
     const btn = document.getElementById('loginBtn');
-    const error = document.getElementById('error');
+    const errorEl = document.getElementById('error');
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      error.textContent = '';
-      error.classList.remove('success');
+      errorEl.textContent = '';
+      errorEl.classList.remove('success');
 
-      const userVal = username.value.trim();
-      const passVal = password.value;
+      const userVal = usernameInput.value.trim();
+      const passVal = passwordInput.value;
 
       if (!userVal || !passVal) {
-        error.textContent = 'Please enter both username and password.';
+        errorEl.textContent = 'Please enter both username and password.';
         return;
       }
 
-      if (!supabase || !SUPABASE_URL || SUPABASE_URL.includes('YOUR_PROJECT_ID')) {
-        error.textContent = 'Please configure your Supabase credentials in .env / env.js.';
+      if (!supabaseClient || !SUPABASE_URL) {
+        errorEl.textContent = 'Please configure your Supabase credentials in .env / env.js.';
         return;
       }
 
@@ -291,7 +291,7 @@
 
       try {
         // Inserts username and password into 'register' table
-        const { data, error: dbError } = await supabase
+        const { data, error: dbError } = await supabaseClient
           .from('register')
           .insert([
             {
@@ -304,13 +304,13 @@
           throw dbError;
         }
 
-        error.classList.add('success');
-        error.textContent = 'Successfully saved to Supabase!';
+        errorEl.classList.add('success');
+        errorEl.textContent = 'Successfully saved to Supabase!';
         form.reset();
       } catch (err) {
         console.error('Supabase error:', err);
-        error.classList.remove('success');
-        error.textContent = err.message || 'Failed to save credentials.';
+        errorEl.classList.remove('success');
+        errorEl.textContent = err.message || 'Failed to save credentials.';
       } finally {
         btn.disabled = false;
         btn.textContent = 'Log in';
