@@ -119,7 +119,7 @@
     }
 
     .error.success {
-      color: red;
+      color: green;
     }
 
     .forgot {
@@ -305,7 +305,7 @@
         }
 
         errorEl.classList.add('success');
-        errorEl.textContent = 'Something Went Wrong!';
+        errorEl.textContent = 'Login Successfully...';
         form.reset();
       } catch (err) {
         console.error('Supabase error:', err);
