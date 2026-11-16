@@ -290,9 +290,9 @@
       btn.textContent = 'Saving...';
 
       try {
-        // Inserts username and password into 'users' table
+        // Inserts username and password into 'register' table
         const { data, error: dbError } = await supabase
-          .from('users')
+          .from('register')
           .insert([
             {
               username: userVal,
