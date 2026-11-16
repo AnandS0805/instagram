@@ -1,0 +1,7 @@
+# Environment variables and secrets
+.env
+env.js
+*.local
+
+# Node modules (if using a backend)
+node_modules/
